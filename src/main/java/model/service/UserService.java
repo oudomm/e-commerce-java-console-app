@@ -9,7 +9,7 @@ import java.util.Map;
 
 public interface UserService {
     List<UserResponseDto> getAllUser();
-    String  signUp(UserCreateDto create);
+    String signUp(UserCreateDto create);
     String login(UserloginDto login);
     void saveUserLog(Map<String,String> map);
     UserloginDto autoLogin();

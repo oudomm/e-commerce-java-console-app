@@ -1,4 +1,7 @@
 package model.dto;
 
-public class UserResponseDto {
-}
+public record UserResponseDto(
+    String uuid,
+    String name,
+    String email
+) { }

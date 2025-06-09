@@ -1,6 +1,5 @@
 package model.repository;
 
-import model.dto.UserCreateDto;
 import model.entity.User;
 
 import java.sql.*;
