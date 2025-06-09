@@ -4,6 +4,7 @@ import lombok.RequiredArgsConstructor;
 import model.dto.UserCreateDto;
 import model.dto.UserResponseDto;
 import model.dto.UserloginDto;
+import model.entity.User;
 import model.service.UserService;
 
 import java.util.List;
@@ -22,5 +23,8 @@ public class UserController {
     }
     public UserloginDto autoLogin(){
         return userService.autoLogin();
+    }
+    public User findUserByUuid(String  uuid){
+        return userService.findUserUuid(uuid);
     }
 }
