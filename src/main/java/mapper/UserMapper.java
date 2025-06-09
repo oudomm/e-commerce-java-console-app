@@ -1,5 +1,6 @@
 package mapper;
 
+import Security.PasswordSecurity;
 import model.dto.UserCreateDto;
 import model.dto.UserResponseDto;
 import model.entity.User;
@@ -15,7 +16,7 @@ public class UserMapper {
                 .uUuid(UUID.randomUUID().toString())
                 .userName(create.name())
                 .email(create.email())
-                .password(create.password())
+                .password(PasswordSecurity.hashing(create.password()))
                 .build();
     }
 }

@@ -1,5 +1,6 @@
 package model.service;
 
+import Security.PasswordSecurity;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import mapper.UserMapper;
@@ -42,7 +43,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUserByEmail(login.email());
         if (user != null){
             if (user.getEmail().equals(login.email())){
-                if(user.getPassword() == login.password()){
+                if(user.getPassword() == PasswordSecurity.hashing(login.password())){
                     user.setStatus(true);
                     Map<String,String > map = new TreeMap<>();
                     map.put("email", user.getEmail());

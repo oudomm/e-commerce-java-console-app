@@ -1,6 +1,7 @@
 package model.repository;
 
 import model.entity.User;
+import utils.DatabaseConnectionConfig;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -13,7 +14,7 @@ public class UserRepository implements Repository<User,Integer>{
         INSERT INTO users ( u_uuid, user_name, email, password)
         values (?,?,?,?)
         """;
-        try(Connection con = DriverManager.getConnection("jdbc:postgresql://35.224.242.247:5432/postgres","postgres","houygood@123")){
+        try(Connection con = DatabaseConnectionConfig.getConnection()){
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1,user.getUUuid());
             statement.setString(2,user.getUserName());
@@ -32,7 +33,7 @@ public class UserRepository implements Repository<User,Integer>{
                 SELECT * FROM users
                 WHERE is_delete = false
                 """;
-        try(Connection con = DriverManager.getConnection("jdbc:postgresql://35.224.242.247:5432/postgres","postgres","houygood@123")){
+        try(Connection con = DatabaseConnectionConfig.getConnection()){
             Statement statement = con.createStatement();
             List<User> userList =new ArrayList<>();
             ResultSet resultSet = statement.executeQuery(sql);
@@ -58,7 +59,7 @@ public class UserRepository implements Repository<User,Integer>{
                 SET is_deleted = true
                 WHERE id = ?
                 """;
-        try(Connection con = DriverManager.getConnection("jdbc:postgresql://35.224.242.247:5432/postgres","postgres","houygood@123")){
+        try(Connection con = DatabaseConnectionConfig.getConnection()){
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setInt(1,id);
             int rowAffected = statement.executeUpdate();
@@ -73,7 +74,7 @@ public class UserRepository implements Repository<User,Integer>{
                 SELECT * FROM users
                 WHERE email = ?
                 """;
-        try(Connection con = DriverManager.getConnection("jdbc:postgresql://35.224.242.247:5432/postgres","postgres","houygood@123")){
+        try(Connection con = DatabaseConnectionConfig.getConnection()){
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1,email);
             ResultSet resultSet = statement.executeQuery();
@@ -97,7 +98,7 @@ public class UserRepository implements Repository<User,Integer>{
                 SELECT * FROM users
                 WHERE u_uuid = ?
                 """;
-        try(Connection con = DriverManager.getConnection("jdbc:postgresql://35.224.242.247:5432/postgres","postgres","houygood@123")){
+        try(Connection con = DatabaseConnectionConfig.getConnection()){
             PreparedStatement statement = con.prepareStatement(sql);
             statement.setString(1,uuid);
             ResultSet resultSet = statement.executeQuery();
