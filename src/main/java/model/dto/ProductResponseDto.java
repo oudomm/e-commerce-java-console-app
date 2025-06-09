@@ -1,4 +1,7 @@
 package model.dto;
 
-public class ProductResponseDto {
+public record ProductResponseDto(
+        String name
+) {
+
 }
