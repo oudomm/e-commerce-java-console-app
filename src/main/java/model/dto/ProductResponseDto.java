@@ -1,4 +1,10 @@
 package model.dto;
 
-public class ProductResponseDto {
+public record ProductResponseDto(
+        String pUuid,
+        String pName,
+        Double price,
+        Integer qty
+) {
+
 }

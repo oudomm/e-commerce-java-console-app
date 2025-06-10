@@ -1,5 +1,8 @@
 package model.entity;
 
+import lombok.Data;
+
+@Data
 public class Product {
     private Integer id;
     private String pUuid;
@@ -7,4 +10,7 @@ public class Product {
     private Double price;
     private Integer qty;
     private Boolean isDeleted;
+
+
+
 }
