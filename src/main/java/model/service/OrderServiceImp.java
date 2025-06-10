@@ -21,12 +21,18 @@ public class OrderServiceImp {
     private final UserRepository userRepository;
     public void WriteRecordToFile(OrderResponseDto orderResponseDto) {
         String filename = "Receipt.txt";
-//        String items = orderResponseDto.productResponseDtoList().stream().forEach(productResponseDto -> productResponseDto.name());
+        List<String> items = new ArrayList<>();
+        String itemLine = "";
+        orderResponseDto.productResponseDtoList().forEach(productResponseDto -> items.add(productResponseDto.name()));
+        for(String item : items) {
+            itemLine="item : " + item+"\n";
+
+        }
         String data =
                 "==========================\n" +
                 "        RECEIPT           \n" +
                 "--------------------------\n" +
-                "Item: " +
+                itemLine +
                 "--------------------------\n" +
                 "Thank you for your purchase!\n" +
                 "==========================\n";
