@@ -15,6 +15,24 @@ import static mapper.ProductMapper.mapProduct;
 public class ProductRepository implements Repository<Product, Integer> {
     @Override
     public Product save(Product product) {
+        String sql = """
+                INSERT INTO products( id ,p_uuid, p_name, price, qty, isDeleted)
+                VALUES(?,?,?,?,?,?)
+                """;
+        try(Connection con = DatabaseConnectionConfig.getConnection()){
+            assert con != null;
+            PreparedStatement pre = con.prepareStatement(sql);
+            pre.setInt(1,product.getId());
+            pre.setString(2, product.getPUuid());
+            pre.setString(3, product.getPName());
+            pre.setDouble(4,product.getPrice());
+            pre.setInt(5,product.getQty());
+            pre.setBoolean(6,product.getIsDeleted());
+            int rowAffected = pre.executeUpdate();
+            return rowAffected>0 ? product: null;
+        }catch (Exception exception){
+            System.out.println("[!] Error during insert data to Product table: " + exception.getMessage());
+        }
         return null;
     }
 
@@ -43,6 +61,29 @@ public class ProductRepository implements Repository<Product, Integer> {
     public Integer delete(Integer id) {
         return 0;
     }
+    public Product findById(Integer id) {
+        String sql = """
+        SELECT * FROM products
+        WHERE id = ?
+    """;
+
+        try (Connection con = DatabaseConnectionConfig.getConnection()) {
+            assert con != null;
+            PreparedStatement pre = con.prepareStatement(sql);
+            pre.setInt(1, id);
+            ResultSet result = pre.executeQuery();
+
+            if (result.next()) {
+                return mapProduct(result);
+            }
+
+        } catch (Exception e) {
+            System.out.println("[!] Error during findById: " + e.getMessage());
+        }
+
+        return null;
+    }
+
     public Product searchByExactName(String name) {
         String sql = """
             SELECT * FROM products
@@ -109,6 +150,7 @@ public class ProductRepository implements Repository<Product, Integer> {
         """;
         List<Product> products = new ArrayList<>();
         try (Connection con = DatabaseConnectionConfig.getConnection()) {
+            assert con != null;
             PreparedStatement pre = con.prepareStatement(sql);
             pre.setString(1, "%" + letter);
             ResultSet result = pre.executeQuery();
@@ -128,6 +170,7 @@ public class ProductRepository implements Repository<Product, Integer> {
         """;
         List<Product> products = new ArrayList<>();
         try (Connection con = DatabaseConnectionConfig.getConnection()) {
+            assert con != null;
             PreparedStatement pre = con.prepareStatement(sql);
             pre.setString(1, category);
             ResultSet result = pre.executeQuery();
