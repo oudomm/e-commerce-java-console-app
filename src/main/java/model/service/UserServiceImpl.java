@@ -65,7 +65,6 @@ public class UserServiceImpl implements UserService {
             throw new InvalidCredentialsException("User with email " + login.email() + " not found.");
         }
     }
-
     @Override
     public void saveUserLog(Map<String,String> map) {
         File file =new File(USERS_FILE.toFile().toURI());
@@ -92,6 +91,7 @@ public class UserServiceImpl implements UserService {
         return null;
     }
     public User findUserUuid(String uuid){
-        return userRepository.findUserByUuid(uuid);
+        Integer id = userRepository.findAll().stream().filter(user -> user.getUUuid().equals(uuid)).findFirst().get().getId();
+        return userRepository.findUserById(id);
     }
 }

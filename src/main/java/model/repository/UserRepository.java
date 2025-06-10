@@ -117,4 +117,28 @@ public class UserRepository implements Repository<User,Integer>{
         }
         return  null;
     }
+    public User findUserById(Integer id){
+        String sql = """
+                SELECT * FROM users
+                WHERE id = ?
+                """;
+        try(Connection con = DatabaseConnectionConfig.getConnection()){
+            PreparedStatement statement = con.prepareStatement(sql);
+            statement.setInt(1,id);
+            ResultSet resultSet = statement.executeQuery();
+            User user = new User();
+            while (resultSet.next()){
+                user.setId(resultSet.getInt("id"));
+                user.setUUuid(resultSet.getString("u_uuid"));
+                user.setUserName(resultSet.getString("user_name"));
+                user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("is_deleted"));
+            }
+            return user;
+
+        }catch (Exception e){
+            System.out.println(e.getMessage());
+        }
+        return  null;
+    }
 }
