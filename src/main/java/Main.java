@@ -1,43 +1,25 @@
-import model.entity.Product;
-import model.dto.ProductResponseDto;
-import model.repository.ProductRepository;
-import mapper.ProductMapper;
-
 import java.util.List;
 import java.util.Map;
-import java.util.stream.Collectors;
 
+import controller.ProductController;
+import model.dto.ProductResponseDto;
 public class Main {
     public static void main(String[] args) {
-        // Step 1: Create repository instance
-        ProductRepository productRepository = new ProductRepository();
+        ProductController controller = new ProductController();
 
-        // Step 2: Get product list from database
-        List<Product> products = productRepository.findAll();
-
-        // Step 3: Convert products to DTOs
-        List<ProductResponseDto> dtos = products.stream()
-                .map(ProductMapper::MapFromProductToProductResponseDto)
-                .toList();
-
-        // Step 4: Print all products
-        System.out.println("All Products:");
-        for (ProductResponseDto dto : dtos) {
-            System.out.println(dto.category() + " - " + dto.productName() +
-                    " (Price: $" + dto.price() + ", Qty: " + dto.qty() + ")");
+        System.out.println("=== All Products ===");
+        for (ProductResponseDto p : controller.getAllProducts()) {
+            System.out.println(p.category() + " - " + p.productName() + " ($" + p.price() + ")");
         }
-        System.out.println();
 
-        // Step 5: Group by category and print
-        Map<String, List<ProductResponseDto>> grouped = dtos.stream()
-                .collect(Collectors.groupingBy(ProductResponseDto::category));
+        System.out.println("\n=== Grouped by Category ===");
+        Map<String, List<ProductResponseDto>> grouped = controller.getProductsGroupedByCategory();
 
-        grouped.forEach((category, list) -> {
+        for (String category : grouped.keySet()) {
             System.out.println("Category: " + category);
-            list.forEach(p ->
-                    System.out.println(" - " + p.productName() +
-                            " (Price: $" + p.price() + ", Qty: " + p.qty() + ")"));
-            System.out.println();
-        });
+            for (ProductResponseDto p : grouped.get(category)) {
+                System.out.println("  - " + p.productName());
+            }
+        }
     }
 }
