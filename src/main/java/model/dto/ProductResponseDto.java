@@ -1,7 +1,9 @@
 package model.dto;
 
 public record ProductResponseDto(
-        String name
-) {
+        String category,
+        String productName,
+        Double price,
+        Integer qty) {
 
 }
