@@ -5,6 +5,6 @@ import model.entity.Product;
 
 public class ProductMapper {
     public static ProductResponseDto MapFromProductToProductResponseDto(Product product) {
-        return new ProductResponseDto(product.getPName());
+        return new ProductResponseDto(product.getPName(), product.getPrice(), product.getQty(), product.getPUuid());
     }
 }

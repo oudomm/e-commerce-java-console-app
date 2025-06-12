@@ -3,6 +3,7 @@ package model.repository;
 import model.entity.Product;
 
 import java.util.List;
+import java.util.UUID;
 
 public class ProductRepository implements Repository<Product,Integer> {
     @Override
@@ -19,7 +20,7 @@ public class ProductRepository implements Repository<Product,Integer> {
     public Integer delete(Integer id) {
         return 0;
     }
-    public Product findProductById(Integer id) {
+    public Product findProductById(UUID id) {
         return null;
     }
 }
