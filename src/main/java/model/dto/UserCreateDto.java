@@ -1,4 +1,7 @@
 package model.dto;
 
-public class UserCreateDto {
-}
+public record UserCreateDto(
+    String name,
+    String email,
+    String password
+) { }
