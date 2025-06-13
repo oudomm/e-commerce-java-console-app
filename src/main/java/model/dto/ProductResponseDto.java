@@ -1,7 +1,10 @@
 package model.dto;
 
 public record ProductResponseDto(
-        String name
+        String pUuid,
+        String pName,
+        Double price,
+        Integer qty
 ) {
 
 }
