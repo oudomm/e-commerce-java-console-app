@@ -23,7 +23,7 @@ public class OrderMapper {
         UserResponseDto userResponseDto1 = UserMapper.mapFromUserToUserResponseDto(user);//note
         List<ProductResponseDto> productResponseDtos = new ArrayList<>(); //note
         order.getProductIds().forEach(productId -> {products.add(productRepository.findProductById(productId));});
-        products.forEach(product -> productResponseDtos.add(ProductMapper.MapFromProductToProductResponseDto(product)));
+        products.forEach(product -> productResponseDtos.add(ProductMapper.mapFromProductToProductResponseDto(product)));
 
         return new OrderResponseDto(null,userResponseDto1,productResponseDtos);
     }

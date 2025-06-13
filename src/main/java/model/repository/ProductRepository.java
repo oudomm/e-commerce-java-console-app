@@ -3,16 +3,47 @@ package model.repository;
 import model.entity.Product;
 import utils.DatabaseConnectionConfig;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.*;
 import java.util.ArrayList;
 import java.util.List;
 
 import static mapper.ProductMapper.mapProduct;
 
 public class ProductRepository implements Repository<Product, Integer> {
+
+    private final String jdbcUrl = "jdbc:postgresql://35.224.242.247:5432/postgres";
+    private final String username = "postgres";
+    private final String password = "houygood@123";
+
+    @Override
+    public List<Product> findAll() {
+        List<Product> products = new ArrayList<>();
+
+        String query = "SELECT id, p_uuid, p_name, price, qty, is_deleted FROM products WHERE is_deleted = false";
+
+        try (Connection conn = DriverManager.getConnection(jdbcUrl, username, password);
+             Statement stmt = conn.createStatement();
+             ResultSet rs = stmt.executeQuery(query)) {
+
+            while (rs.next()) {
+                Product product = new Product(
+                        rs.getInt("id"),
+                        rs.getString("p_uuid"),
+                        rs.getString("p_name"),
+                        rs.getDouble("price"),
+                        rs.getInt("qty"),
+                        rs.getBoolean("is_deleted")
+                );
+                products.add(product);
+            }
+
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+
+        return products;
+    }
+
     @Override
     public Product save(Product product) {
         String sql = """
@@ -37,30 +68,13 @@ public class ProductRepository implements Repository<Product, Integer> {
     }
 
     @Override
-    public List<Product> findAll() {
-        String sql = """
-                SELECT * FROM products
-                """;
-        try(Connection con = DatabaseConnectionConfig.getConnection()){
-            Statement stm = con.createStatement();
-            ResultSet result = stm.executeQuery(sql);
-            List<Product> products = new ArrayList<>();
-            while (result.next()){
-                Product product = mapProduct(result);
-                // add product to list
-                products.add(product);
-            }
-            return products;
-        }catch (Exception exception){
-            System.out.println("[!] Error during get all products: " + exception.getMessage());
-        }
-        return null;
-    }
-
-    @Override
     public Integer delete(Integer id) {
         return 0;
     }
+    public Product findProductById(Integer id) {
+        return null;
+    }
+
     public Product findById(Integer id) {
         String sql = """
         SELECT * FROM products
@@ -182,5 +196,4 @@ public class ProductRepository implements Repository<Product, Integer> {
         }
         return products;
     }
-
 }

@@ -23,7 +23,7 @@ public class OrderServiceImp {
         String filename = "Receipt.txt";
         List<String> items = new ArrayList<>();
         String itemLine = "";
-        orderResponseDto.productResponseDtoList().forEach(productResponseDto -> items.add(productResponseDto.name()));
+        orderResponseDto.productResponseDtoList().forEach(productResponseDto -> items.add(productResponseDto.pName()));
         for(String item : items) {
             itemLine="item : " + item+"\n";
 
