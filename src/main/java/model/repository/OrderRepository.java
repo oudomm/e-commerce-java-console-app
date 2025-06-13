@@ -12,7 +12,7 @@ import java.util.List;
 public class OrderRepository implements Repository<Order,Integer> {
     public void makeOrders(Integer userId,Integer productId)  {
         String sql = """
-                INSERT INTO orders
+                INSERT INTO orders_products
                 VALUES (?,?)
                 """;
         try (Connection connection = DriverManager.getConnection("jdbc:postgresql://35.224.242.247:5432/postgres","postgres","houygood@123")){

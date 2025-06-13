@@ -1,7 +1,9 @@
 package model.service;
 
 import mapper.ProductMapper;
+import model.dto.ProductCreateDto;
 import model.dto.ProductResponseDto;
+import model.entity.CartItem;
 import model.entity.Product;
 import model.repository.ProductRepository;
 import controller.ProductController;
@@ -11,6 +13,36 @@ import java.util.List;
 
 public class ProductServiceImpl implements ProductService{
 private final ProductRepository productRepository = new ProductRepository();
+
+    @Override
+    public List<ProductResponseDto> getAllProducts() {
+        return List.of();
+    }
+
+    @Override
+    public ProductResponseDto insertNewProduct(ProductCreateDto productModel) {
+        return null;
+    }
+
+    @Override
+    public ProductResponseDto getProductByName(String productName) {
+        return null;
+    }
+
+    @Override
+    public ProductResponseDto getProductByCategory(String productCategory) {
+        return null;
+    }
+
+    @Override
+    public CartItem addToCart(String uuid, Integer quantity) {
+        return null;
+    }
+
+    @Override
+    public List<CartItem> getAllCartProducts() {
+        return List.of();
+    }
 
     @Override
     public List<ProductResponseDto> productSearch(String keyword) {
