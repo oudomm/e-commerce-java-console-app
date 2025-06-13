@@ -1,4 +1,4 @@
 package model.service;
 
-public interface UserService {
+ interface UserService {
 }
