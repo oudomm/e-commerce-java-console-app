@@ -35,13 +35,16 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String signUp(UserCreateDto create) throws UserAlreadyExistsException {
-        User user = userRepository.findUserByEmail(create.email());
-        if (user == null) {
-            userRepository.save(UserMapper.mapFromCreateUseToUser(create));
-            return create.email(); // Or UUID from saved user
-        } else {
+        User existingUser = userRepository.findUserByEmail(create.email());
+        if (existingUser != null) {
             throw new UserAlreadyExistsException("User already exists with email: " + create.email());
         }
+
+        User newUser = UserMapper.mapFromCreateUseToUser(create);
+        User savedUser = userRepository.save(newUser);
+
+        // Return UUID for consistency with login method
+        return savedUser.getUUuid();
     }
 
     @Override

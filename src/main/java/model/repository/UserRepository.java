@@ -69,6 +69,7 @@ public class UserRepository implements Repository<User,Integer>{
         }
         return 0;
     }
+
     public User findUserByEmail(String email){
         String sql = """
                 SELECT * FROM users
@@ -76,23 +77,26 @@ public class UserRepository implements Repository<User,Integer>{
                 """;
         try(Connection con = DatabaseConnectionConfig.getConnection()){
             PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1,email);
+            statement.setString(1, email);
             ResultSet resultSet = statement.executeQuery();
-            User user = new User();
-            while (resultSet.next()){
+
+            if (resultSet.next()){
+                User user = new User();
                 user.setId(resultSet.getInt("id"));
                 user.setUUuid(resultSet.getString("u_uuid"));
                 user.setUserName(resultSet.getString("user_name"));
                 user.setEmail(resultSet.getString("email"));
-                user.setPassword(resultSet.getString("is_deleted"));
+                user.setPassword(resultSet.getString("password"));
+                user.setIsDeleted(resultSet.getBoolean("is_deleted"));
+                return user;
             }
-            return user;
 
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.err.println("[!] Error finding user by email: " + e.getMessage());
         }
         return  null;
     }
+
     public User findUserByUuid(String uuid){
         String sql = """
                 SELECT * FROM users
