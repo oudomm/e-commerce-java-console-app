@@ -21,7 +21,7 @@ public class Main {
         OrderController orderController = new OrderController();
         System.out.print("[+] Insert User Uuid: ");
         String userUuid = new Scanner(System.in).nextLine();
-        System.out.println("[+] Click to order ....!");
+        System.out.print("[+] Click to order ....!");
         new Scanner(System.in).nextLine();
         List<String> productUuidLists = new ArrayList<>();
         if (!cartItems.isEmpty()){
