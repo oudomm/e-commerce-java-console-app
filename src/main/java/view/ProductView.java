@@ -21,7 +21,17 @@ public class ProductView {
         }
     }
 
-    public Map<String, Integer> getUuidToProductIdMap() {
+    public Map<String, Integer> getUuidToProductIdMap(List<Product> products) {
+        uuidToProductId.clear(); // Clear old data
+
+        for (Product p : products) {
+            String uuid = p.getPUuid();
+            if (uuid != null) {
+                uuidToProductId.put(uuid.trim().toLowerCase(), p.getId());
+            }
+        }
+
         return uuidToProductId;
     }
+
 }

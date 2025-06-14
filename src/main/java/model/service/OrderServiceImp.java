@@ -1,6 +1,7 @@
 package model.service;
 
 import lombok.AllArgsConstructor;
+import lombok.NoArgsConstructor;
 import mapper.OrderMapper;
 import model.dto.OrderResponseDto;
 import model.entity.Order;
@@ -11,14 +12,16 @@ import model.repository.ProductRepository;
 import model.repository.UserRepository;
 
 import java.io.*;
+import java.security.NoSuchAlgorithmException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.NoSuchElementException;
 
-@AllArgsConstructor
+@NoArgsConstructor
 public class OrderServiceImp {
-    private final ProductRepository productRepository;
-    private final OrderRepository orderRepository;
-    private final UserRepository userRepository;
+    private final ProductRepository productRepository = new ProductRepository();
+    private final OrderRepository orderRepository = new OrderRepository();
+    private final UserRepository userRepository = new UserRepository();
     public void WriteRecordToFile(OrderResponseDto orderResponseDto) {
         String filename = "Receipt.txt";
         List<String> items = new ArrayList<>();
@@ -48,23 +51,30 @@ public class OrderServiceImp {
     }
 
     public OrderResponseDto makeOrder(String userUuid,List<String> productUuids) {
-        List<Product> products = new ArrayList<>();
-        List<Integer> productsIds = new ArrayList<>();
-        Integer userId;
-        if (userUuid != null) {
-           User user = userRepository.findAll().stream().filter(U->U.getUUuid().equals(userUuid)).findFirst().get();
-           User user1 = userRepository.findUserById(user.getId());
-           userId = user1.getId();
-        } else {
-            userId = 0;
-        }
-        if (productUuids != null) {
-            productUuids.forEach(productUuid->products.add(productRepository.findAll().stream().filter(product->product.getPUuid().equals(productUuid)).findFirst().get()));
-            products.forEach(product -> productsIds.add(product.getId()));
-        }
-        orderRepository.save(new Order(userId,productsIds));
-        WriteRecordToFile(OrderMapper.MapperFromOrdertoOrderResponseDto(new Order(userId,productsIds)));
+        try {
+            List<Product> products = new ArrayList<>();
+            List<Integer> productsIds = new ArrayList<>();
+            Integer userId;
+            if (userUuid != null) {
+                User user = userRepository.findAll().stream().filter(U->U.getUUuid().equals(userUuid)).findFirst().get();
+                User user1 = userRepository.findUserById(user.getId());
+                userId = user1.getId();
+            } else {
+                userId = 0;
+            }
+            if (productUuids != null) {
+                productUuids.forEach(productUuid->products.add(productRepository.findAll().stream().filter(product->product.getPUuid().equals(productUuid)).findFirst().get()));
+                products.forEach(product -> productsIds.add(product.getId()));
+            }
+            productsIds.forEach(System.out::println);
+            orderRepository.save(new Order(userId,productsIds));
+            WriteRecordToFile(OrderMapper.MapperFromOrdertoOrderResponseDto(new Order(userId,productsIds)));
 
-        return OrderMapper.MapperFromOrdertoOrderResponseDto(new Order(userId,productsIds));
+            return OrderMapper.MapperFromOrdertoOrderResponseDto(new Order(userId,productsIds));
+
+        }catch (NoSuchElementException exception){
+            System.out.println("No such product or order found"+ exception.getMessage());
+        }
+        return null;
     }
 }

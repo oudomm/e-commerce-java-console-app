@@ -31,7 +31,7 @@ public class UserRepository implements Repository<User,Integer>{
     public List<User> findAll() {
         String sql = """
                 SELECT * FROM users
-                WHERE is_delete = false
+                WHERE is_deleted = false
                 """;
         try(Connection con = DatabaseConnectionConfig.getConnection()){
             Statement statement = con.createStatement();
@@ -48,7 +48,7 @@ public class UserRepository implements Repository<User,Integer>{
             }
             return userList;
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("Error findAll :"+e.getMessage());
         }
         return null;
     }
@@ -86,6 +86,7 @@ public class UserRepository implements Repository<User,Integer>{
                 user.setEmail(resultSet.getString("email"));
                 user.setPassword(resultSet.getString("is_deleted"));
             }
+            System.out.println(user);
             return user;
 
         }catch (Exception e){
@@ -132,6 +133,7 @@ public class UserRepository implements Repository<User,Integer>{
                 user.setUUuid(resultSet.getString("u_uuid"));
                 user.setUserName(resultSet.getString("user_name"));
                 user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
                 user.setPassword(resultSet.getString("is_deleted"));
             }
             return user;
