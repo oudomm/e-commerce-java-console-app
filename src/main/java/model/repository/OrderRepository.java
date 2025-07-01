@@ -2,6 +2,7 @@ package model.repository;
 
 
 import model.entity.Order;
+import utils.DatabaseConnectionConfig;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -15,7 +16,7 @@ public class OrderRepository implements Repository<Order,Integer> {
                 INSERT INTO orders_products
                 VALUES (?,?)
                 """;
-        try (Connection connection = DriverManager.getConnection("jdbc:postgresql://35.224.242.247:5432/postgres","postgres","houygood@123")){
+        try (Connection connection = DatabaseConnectionConfig.getConnection();){
             PreparedStatement preparedStatement = connection.prepareStatement(sql);
             preparedStatement.setInt(1,userId);
             preparedStatement.setInt(2,productId);

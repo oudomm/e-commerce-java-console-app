@@ -31,7 +31,7 @@ public class UserRepository implements Repository<User,Integer>{
     public List<User> findAll() {
         String sql = """
                 SELECT * FROM users
-                WHERE is_delete = false
+                WHERE is_deleted = false
                 """;
         try(Connection con = DatabaseConnectionConfig.getConnection()){
             Statement statement = con.createStatement();
@@ -48,7 +48,7 @@ public class UserRepository implements Repository<User,Integer>{
             }
             return userList;
         }catch (Exception e){
-            System.out.println(e.getMessage());
+            System.out.println("Error findAll :"+e.getMessage());
         }
         return null;
     }
@@ -69,7 +69,6 @@ public class UserRepository implements Repository<User,Integer>{
         }
         return 0;
     }
-
     public User findUserByEmail(String email){
         String sql = """
                 SELECT * FROM users
@@ -77,26 +76,24 @@ public class UserRepository implements Repository<User,Integer>{
                 """;
         try(Connection con = DatabaseConnectionConfig.getConnection()){
             PreparedStatement statement = con.prepareStatement(sql);
-            statement.setString(1, email);
+            statement.setString(1,email);
             ResultSet resultSet = statement.executeQuery();
-
-            if (resultSet.next()){
-                User user = new User();
+            User user = new User();
+            while (resultSet.next()){
                 user.setId(resultSet.getInt("id"));
                 user.setUUuid(resultSet.getString("u_uuid"));
                 user.setUserName(resultSet.getString("user_name"));
                 user.setEmail(resultSet.getString("email"));
-                user.setPassword(resultSet.getString("password"));
-                user.setIsDeleted(resultSet.getBoolean("is_deleted"));
-                return user;
+                user.setPassword(resultSet.getString("is_deleted"));
             }
+            System.out.println(user);
+            return user;
 
         }catch (Exception e){
-            System.err.println("[!] Error finding user by email: " + e.getMessage());
+            System.out.println(e.getMessage());
         }
         return  null;
     }
-
     public User findUserByUuid(String uuid){
         String sql = """
                 SELECT * FROM users
@@ -136,6 +133,7 @@ public class UserRepository implements Repository<User,Integer>{
                 user.setUUuid(resultSet.getString("u_uuid"));
                 user.setUserName(resultSet.getString("user_name"));
                 user.setEmail(resultSet.getString("email"));
+                user.setPassword(resultSet.getString("password"));
                 user.setPassword(resultSet.getString("is_deleted"));
             }
             return user;

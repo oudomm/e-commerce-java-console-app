@@ -16,10 +16,7 @@ import model.repository.UserRepository;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
+import java.util.*;
 
 
 public class UserServiceImpl implements UserService {
@@ -35,16 +32,14 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public String signUp(UserCreateDto create) throws UserAlreadyExistsException {
-        User existingUser = userRepository.findUserByEmail(create.email());
-        if (existingUser != null) {
+//        System.out.println(create);
+        User user = userRepository.findUserByEmail(create.email());
+        if (user.getId() == null) {
+            userRepository.save(UserMapper.mapFromCreateUseToUser(create));
+            return create.email(); // Or UUID from saved user
+        } else {
             throw new UserAlreadyExistsException("User already exists with email: " + create.email());
         }
-
-        User newUser = UserMapper.mapFromCreateUseToUser(create);
-        User savedUser = userRepository.save(newUser);
-
-        // Return UUID for consistency with login method
-        return savedUser.getUUuid();
     }
 
     @Override
@@ -52,8 +47,10 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findUserByEmail(login.email());
         if (user != null) {
             String hashedInputPassword = PasswordSecurity.hashing(login.password());
-
-            if (user.getPassword().equals(hashedInputPassword)) {
+//            System.out.println(hashedInputPassword);
+            byte[] decodedBytes = Base64.getDecoder().decode(user.getPassword());
+            String decoded = new String(decodedBytes);
+            if (decoded.equals(login.password())) {
                 user.setStatus(true);
                 Map<String, String> map = new TreeMap<>();
                 map.put("email", user.getEmail());
