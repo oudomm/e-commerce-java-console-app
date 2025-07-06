@@ -16,7 +16,7 @@ public class UserMapper {
                 .uUuid(UUID.randomUUID().toString())
                 .userName(create.name())
                 .email(create.email())
-                .password(PasswordSecurity.hashing(create.password()))
+                .password(create.password())
                 .build();
     }
 }

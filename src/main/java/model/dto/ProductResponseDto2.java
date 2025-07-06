@@ -1,11 +1,9 @@
 package model.dto;
 
-import lombok.Builder;
-
 import java.math.BigDecimal;
 
-@Builder
-public record ProductResponseDto(
+public record ProductResponseDto2(
+        Integer id,
         String pUuid,
         String category,
         String pName,

@@ -17,20 +17,19 @@ import java.util.List;
 @NoArgsConstructor
 public class UserController {
     private final UserService userService = new UserServiceImpl();
-    public List<UserResponseDto> showAllUser(){
-        return userService.getAllUser();
+    public List<UserResponseDto> showAllUser(int numberOfRows,int numberOfusers){
+        return userService.getAllUser(numberOfRows,numberOfusers);
     }
     public String signUp(UserCreateDto create) throws UserAlreadyExistsException {
         return userService.signUp(create);
     }
     public String login(UserloginDto login) throws InvalidCredentialsException {
-        System.out.print(login);
         return userService.login(login);
     }
     public UserloginDto autoLogin(){
         return userService.autoLogin();
     }
-    public User findUserByUuid(String  uuid){
-        return userService.findUserUuid(uuid);
+    public User findUserByUuid(String  uuid,int numberOfRole,int numberOfUsers){
+        return userService.findUserUuid(uuid,numberOfRole,numberOfUsers);
     }
 }

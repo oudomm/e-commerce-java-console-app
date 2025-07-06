@@ -2,6 +2,8 @@ package model.entity;
 
 import lombok.*;
 
+import java.math.BigDecimal;
+
 @NoArgsConstructor
 @AllArgsConstructor
 @Data
@@ -11,7 +13,7 @@ public class Product {
     private Integer id;
     private String pUuid;
     private String pName;
-    private Double price;
+    private BigDecimal price;
     private Integer qty;
     private Boolean isDeleted;
 }

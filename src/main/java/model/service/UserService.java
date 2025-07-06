@@ -11,10 +11,10 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserService {
-    List<UserResponseDto> getAllUser();
+    List<UserResponseDto> getAllUser(int numberOfRows,int numberOfUsers);
     String signUp(UserCreateDto create) throws UserAlreadyExistsException;
     String login(UserloginDto login) throws InvalidCredentialsException;
     void saveUserLog(Map<String,String> map);
     UserloginDto autoLogin();
-    User findUserUuid(String uuid);
+    User findUserUuid(String uuid,int numberOfRole,int numberOfUsers);
 }

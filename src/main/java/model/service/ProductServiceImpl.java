@@ -3,6 +3,7 @@ package model.service;
 import mapper.ProductMapper;
 import model.dto.ProductCreateDto;
 import model.dto.ProductResponseDto;
+import model.dto.ProductResponseDto2;
 import model.entity.CartItem;
 import model.entity.Product;
 import model.repository.ProductRepository;
@@ -10,6 +11,7 @@ import controller.ProductController;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ProductServiceImpl implements ProductService{
 private final ProductRepository productRepository = new ProductRepository();
@@ -78,5 +80,17 @@ private final ProductRepository productRepository = new ProductRepository();
         }
 
         return productResponseDtoList;
+    }
+    public void insertProductAsBatch(int batchSize  ) {
+        productRepository.insertProductAsBatch(batchSize);
+    }
+    public List<ProductResponseDto2> readProductAsBatch(int batchSize, int offset) {
+        List<ProductResponseDto2> productResponseDtoList = new ArrayList<>();
+        productRepository.readProductAsBatch(batchSize,offset).forEach(product -> productResponseDtoList.add(ProductMapper.mapFromProductToProductResponseDto2(product)));
+        return productResponseDtoList;
+    }
+
+    public static ProductResponseDto findProductResponseDtoList(List<Product> products,String productUuid) {
+        return products.stream().map(ProductMapper::mapFromProductToProductResponseDto).collect(Collectors.toList()).stream().filter(productResponseDto1 -> productResponseDto1.pUuid().equals(productUuid)).findFirst().get();
     }
 }

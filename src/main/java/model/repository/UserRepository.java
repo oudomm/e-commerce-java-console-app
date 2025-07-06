@@ -28,7 +28,7 @@ public class UserRepository implements Repository<User,Integer>{
         return null;
     }
     @Override
-    public List<User> findAll() {
+    public List<User> findAll(int roleNumber,int numberOfProducts) {
         String sql = """
                 SELECT * FROM users
                 WHERE is_deleted = false
@@ -84,9 +84,10 @@ public class UserRepository implements Repository<User,Integer>{
                 user.setUUuid(resultSet.getString("u_uuid"));
                 user.setUserName(resultSet.getString("user_name"));
                 user.setEmail(resultSet.getString("email"));
-                user.setPassword(resultSet.getString("is_deleted"));
+                user.setPassword(resultSet.getString("password"));
+                user.setIsDeleted(Boolean.valueOf(resultSet.getString("is_deleted")));
+                user.setStatus(null);
             }
-            System.out.println(user);
             return user;
 
         }catch (Exception e){

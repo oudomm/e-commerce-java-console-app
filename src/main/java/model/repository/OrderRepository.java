@@ -39,7 +39,7 @@ public class OrderRepository implements Repository<Order,Integer> {
     }
 
     @Override
-    public List<Order> findAll() {
+    public List<Order> findAll(int roleNumber,int numberOfProducts) {
         return List.of();
     }
 

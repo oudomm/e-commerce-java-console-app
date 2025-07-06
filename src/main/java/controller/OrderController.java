@@ -18,10 +18,10 @@ public class OrderController {
         this.orderService = orderService;
     }
 
-    public OrderResponseDto processOrder(String uuid, List<String> productUuid) {
+    public OrderResponseDto processOrder(String uuid, List<String> productUuid,int roleNumber,int numberOfProducts) {
 //        System.out.println(uuid);
 //        productUuid.forEach(System.out::println);
         System.out.println("processOrder...");
-        return orderService.makeOrder(uuid, productUuid);
+        return orderService.makeOrder(uuid, productUuid,roleNumber,numberOfProducts);
     }
 }

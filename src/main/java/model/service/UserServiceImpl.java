@@ -14,6 +14,7 @@ import model.repository.UserRepository;
 
 
 import java.io.File;
+import java.nio.charset.StandardCharsets;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.*;
@@ -24,9 +25,9 @@ public class UserServiceImpl implements UserService {
     private static final Path USERS_FILE = Paths.get("src", "main", "java", "model", "file", "userlogs", "users.json");
     private static final ObjectMapper mapper = new ObjectMapper();
     @Override
-    public List<UserResponseDto> getAllUser() {
+    public List<UserResponseDto> getAllUser(int roleNumber, int numberOfUsers) {
         List<UserResponseDto> userResponseDtos = new ArrayList<>();
-        userRepository.findAll().forEach(e->userResponseDtos.add(UserMapper.mapFromUserToUserResponseDto(e)));
+        userRepository.findAll(roleNumber,numberOfUsers).forEach(e->userResponseDtos.add(UserMapper.mapFromUserToUserResponseDto(e)));
         return userResponseDtos;
     }
 
@@ -45,12 +46,15 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(UserloginDto login) throws InvalidCredentialsException {
         User user = userRepository.findUserByEmail(login.email());
+        System.out.println("user login: " + user);
+        System.out.println("User logged in successfully");
         if (user != null) {
             String hashedInputPassword = PasswordSecurity.hashing(login.password());
 //            System.out.println(hashedInputPassword);
-            byte[] decodedBytes = Base64.getDecoder().decode(user.getPassword());
-            String decoded = new String(decodedBytes);
-            if (decoded.equals(login.password())) {
+//            byte[] decodedBytes = Base64.getDecoder().decode(user.getPassword());
+//            String decodedPassword = new String(decodedBytes, StandardCharsets.UTF_8);
+//            System.out.println("password: " + decodedPassword);
+            if (user.getPassword().equals(login.password())) {
                 user.setStatus(true);
                 Map<String, String> map = new TreeMap<>();
                 map.put("email", user.getEmail());
@@ -90,8 +94,10 @@ public class UserServiceImpl implements UserService {
         }
         return null;
     }
-    public User findUserUuid(String uuid){
-        Integer id = userRepository.findAll().stream().filter(user -> user.getUUuid().equals(uuid)).findFirst().get().getId();
+    public User findUserUuid(String uuid,int numberOfRole,int numberOfUsers) {
+        Integer id = userRepository.findAll(numberOfRole,numberOfUsers).stream().filter(user -> user.getUUuid().equals(uuid)).findFirst().get().getId();
         return userRepository.findUserById(id);
     }
+
+
 }
