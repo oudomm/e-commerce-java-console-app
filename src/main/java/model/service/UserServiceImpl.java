@@ -46,8 +46,6 @@ public class UserServiceImpl implements UserService {
     @Override
     public String login(UserloginDto login) throws InvalidCredentialsException {
         User user = userRepository.findUserByEmail(login.email());
-        System.out.println("user login: " + user);
-        System.out.println("User logged in successfully");
         if (user != null) {
             String hashedInputPassword = PasswordSecurity.hashing(login.password());
 //            System.out.println(hashedInputPassword);
@@ -61,6 +59,7 @@ public class UserServiceImpl implements UserService {
                 map.put("password", user.getPassword());
                 map.put("status", user.getStatus().toString());
                 saveUserLog(map);
+                System.out.println("User logged in successfully");
                 return user.getUUuid();
             } else {
                 throw new InvalidCredentialsException("Password is incorrect.");

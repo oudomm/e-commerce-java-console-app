@@ -24,7 +24,9 @@ public class MenuView {
         table.addCell("6", style); table.addCell("Order", style);
         table.addCell("7", style); table.addCell("Insert Million Product", style);
         table.addCell("8", style); table.addCell("Read Million Products", style);
-        table.addCell("9", style); table.addCell("Logout", style);
+        table.addCell("9", style); table.addCell("Delete Product", style);
+        table.addCell("10", style); table.addCell("Search Product", style);
+        table.addCell("11", style); table.addCell("Logout", style);
 
 
         table.addCell("0", style); table.addCell("Exit", style);

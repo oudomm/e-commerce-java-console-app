@@ -50,4 +50,7 @@ public class ProductController {
         return ProductServiceImpl.findProductResponseDtoList(responseDto,uuid);
     }
 
+    public int deleteProduct(String uuid,List<Product> responseDto) {
+        return productServiceImp.deleteProduct(uuid,responseDto);
+    }
 }

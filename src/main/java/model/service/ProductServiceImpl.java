@@ -93,4 +93,11 @@ private final ProductRepository productRepository = new ProductRepository();
     public static ProductResponseDto findProductResponseDtoList(List<Product> products,String productUuid) {
         return products.stream().map(ProductMapper::mapFromProductToProductResponseDto).collect(Collectors.toList()).stream().filter(productResponseDto1 -> productResponseDto1.pUuid().equals(productUuid)).findFirst().get();
     }
+    public int deleteProduct(String uuid,List<Product> products) {
+        Product product = products.stream().filter(product1 -> product1.getPUuid().equals(uuid)).toList().getFirst();
+        if (product != null) {
+            return productRepository.delete(product.getId());
+        }
+        return 0;
+    }
 }

@@ -82,8 +82,6 @@ public class UI {
                             authorize = true;
                         }
 
-                        System.out.print("we get UUId "+uuid);
-
                     } catch (InputMismatchException e) {
                         System.out.println("❌ Invalid input type.");
                     } catch (IllegalArgumentException e) {
@@ -125,7 +123,7 @@ public class UI {
                     // Create the DTO
                     UserCreateDto user = new UserCreateDto(name, email, password);
                     userController.signUp(user);
-
+                    authorize = true;
                     // Print result
                     System.out.println("✅ User created: " + user);
                     break;
@@ -211,13 +209,14 @@ public class UI {
                     break;
                 case "9":
                     if (authorize) {
-                        authorize = false;
-                        System.out.println("Logout from the system");
+                        System.out.print("Enter product uuid : ");
+                        String productUuid = scanner.nextLine();
+                        productController.deleteProduct(productUuid,products);
                     }
                     break;
                 case "10":
                     if (authorize) {
-                        System.out.println("Enter product uuid : ");
+                        System.out.print("Enter product uuid : ");
                         String productUuid = scanner.nextLine();
                         ProductResponseDto productResponseDto = productController.getProductResponseDto(products,productUuid);
                         TableUI<ProductResponseDto> tableUI = new TableUI<>();
@@ -234,18 +233,22 @@ public class UI {
                     }
                     break;
                 case "11":
+                    if (authorize) {
+                        authorize = false;
+                        System.out.println("Logout from the system");
+                    }else {
+                        System.out.println("You have not logged in yet");
+                    }
+                    break;
+                case "12":
                     userController.autoLogin();
                     break;
                 case "0":
                     if (authorize) {
                         System.out.println("Goodbye!");
 
-                    }else {
-                        System.out.println("You have not logged in yet");
                     }
-
                     return;
-
                 default:
                     System.out.println("Invalid option");
             }

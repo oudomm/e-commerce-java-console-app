@@ -74,6 +74,18 @@ public class ProductRepository implements Repository<Product, Integer> {
 
     @Override
     public Integer delete(Integer id) {
+        String sql = "DELETE FROM products WHERE id = ? ";
+        try (Connection conn = DatabaseConnectionConfig.getConnection()){
+            assert conn != null;
+            PreparedStatement pre = conn.prepareStatement(sql);
+            pre.setInt(1,id);
+            int rowAffected = pre.executeUpdate();
+            if(rowAffected>0){
+                System.out.println("[!] Product deleted successfully");
+                return 1;
+            }
+
+        }catch (Exception exception){}
         return 0;
     }
     public Product findProductById(Integer id) {
